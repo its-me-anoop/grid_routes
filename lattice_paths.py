@@ -6,14 +6,14 @@ t = turtle.Turtle()
 t.speed(0)
 t.shape("circle")
 colors = ["red", "blue", "green", "purple", "magenta", "orange"]
-grid_size = 50
-count = 5
+grid_size = 20
+count = 20
 n = 0
 x = 0
 y = 0
 paths = []
 new_path = ""
-timeout = 30  # Specify the timeout period (in seconds)
+timeout = 15  # Specify the timeout period (in seconds)
 
 
 def initial_position(count):
@@ -91,7 +91,8 @@ def random_move():
         moves.append("forward")
     if y < count:  # Check if moving down is possible
         moves.append("down")
-        moves.append("down")  # Add 'down' one more time to increase its chance
+        moves.append("down")
+        moves.append("down")
 
     # Randomly select a move
     move = random.choice(moves)
@@ -109,6 +110,7 @@ t.pendown()
 t.width(5)
 t.color("red")
 
+
 start_time = time.time()  # Start the timer
 
 while y < count or x < count:
@@ -121,7 +123,9 @@ while y < count or x < count:
         if new_path not in paths:
             paths.append(new_path)
             new_path = ""
-            print(f"New path found. Time taken: {time.time() - start_time} seconds.")
+            print(
+                f"New path found: {len(paths)} : {paths[-1]}. Time taken: {time.time() - start_time} seconds."
+            )
             start_time = time.time()  # Reset the timer for the next path
         else:
             new_path = ""
@@ -138,8 +142,28 @@ if paths:  # Check if the paths list is not empty
     shortest_path = min(
         paths, key=lambda path: len(path) // 2
     )  # Each step is represented by two characters in the string
+    t.penup()
+    t.goto(0, -(count * grid_size) / 2 - 50)
+    t.write(
+        "Shortest path: "
+        + shortest_path
+        + " with "
+        + str(len(shortest_path) // 2)
+        + " steps",
+        align="center",
+        font=("Arial", 16, "normal"),
+    )
+    t.penup()
+    t.goto(0, -(count * grid_size) / 2 - 75)
+    t.write(
+        "Total number of paths found : " + str(len(paths)),
+        align="center",
+        font=("Arial", 16, "normal"),
+    )
+    t.hideturtle()
     print(f"Shortest path: {shortest_path} with {len(shortest_path)//2} steps")
 else:
     print("No paths were found.")
+
 
 turtle.done()
